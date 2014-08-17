@@ -53,6 +53,42 @@
 						</div>
 					</div>
 					<div class="box-body chat" id="chat-box">
+					<?php 
+						foreach ($contenido as $fila)
+						{
+					?>
+						<!-- chat item -->
+						<div class="item">
+						<?php 
+							if ( $fila->tipo == 0 )
+							{
+						?>
+							<img src="<?php echo base_url('img/avatar04.png'); ?>" alt="usuario" class="offline"/>
+						<?php 
+							}
+							else
+							{
+						?>
+							<img src="<?php echo base_url('img/avatar.png'); ?>" alt="consultor" class="online"/>
+						<?php
+							}
+						?>
+							<p class="message">
+								<a href="#" class="name">
+									<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 
+										<?php 
+											$date = date_create($fila->fecha);
+											echo date_format($date, 'd/m/Y H:i'); 
+										?>
+									</small>
+									<?php echo $fila->first_name; ?>
+								</a>
+								<?php echo $fila->mensaje; ?>
+							</p>
+						</div><!-- /.item -->
+					<?php
+						}
+					?>
 					</div><!-- /.chat -->
 					<div class="box-footer">
 						<div class="input-group">
@@ -74,17 +110,15 @@
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-
 			view_chat();
-			setInterval(function() {
-				view_chat();
-			}, 2500);
-
 		});
 
 
 		function view_chat()
 		{
+			var button_form = $('#enviar');
+			button_form.attr('disabled','disabled');
+
 			var new_data = [];
 			new_data.push(
 				{ name: 'cod_consulta', value: $('#consulta').val() },
@@ -135,13 +169,6 @@
 					$('#chat-box').html( html );
 				}
 			});
-
-			var container = $('#chat-box');
-			height_value = container[0].scrollHeight;
-
-			// $(".slimScrollBar").css({ top: height_value + 'px' });
-			container[0].scrollTop = height_value;
-
 		}
 
 		$('#enviar').click(function (event) {
@@ -177,8 +204,7 @@
 					{
 						if ( json.estado == 1 )
 						{
-							// add_mensaje( mensaje );
-							view_chat();
+							add_mensaje( mensaje );
 						} else {
 							alert(json.msg);
 						}
@@ -197,40 +223,41 @@
 			$('#enviar').trigger('click');
 		});
 
-		// function add_mensaje( mensaje )
-		// {
-		// 	var currentdate = new Date();
-		// 	var fomat_date = currentdate.getDate() + "/"
-		// 					+ (currentdate.getMonth()+1)  + "/" 
-		// 					+ currentdate.getFullYear() + " "  
-		// 					+ currentdate.getHours() + ":"  
-		// 					+ currentdate.getMinutes();
+		function add_mensaje( mensaje )
+		{
 
-		// 	var tipo = '<?php echo $user->type; ?>';
-		// 	image = ( parseInt(tipo) == 0) ? 'avatar04.png' : 'avatar.png';
+			var currentdate = new Date();
+			var fomat_date = currentdate.getDate() + "/"
+							+ (currentdate.getMonth()+1)  + "/" 
+							+ currentdate.getFullYear() + " "  
+							+ currentdate.getHours() + ":"  
+							+ currentdate.getMinutes();
 
-		// 	var html = '';
-		// 			/** chat item **/
-		// 	html = '<div class="item">' +
-		// 				'<img src="'+ CI.base_url + 'img/'+ image +'" alt="user image" class="offline"/>' +
-		// 				'<p class="message">' +
-		// 					'<a href="#" class="name">' +
-		// 						'<small class="text-muted pull-right"><i class="fa fa-clock-o"></i>'+ fomat_date +'</small>' +
-		// 						'<?php echo $user->first_name; ?>' +
-		// 					'</a>' +
-		// 					mensaje + 
-		// 				'</p>' +
-		// 			'</div>';
-		// 			/** /.item **/
+			var tipo = '<?php echo $user->type; ?>';
+			image = ( parseInt(tipo) == 0) ? 'avatar04.png' : 'avatar.png';
 
-		// 	$('#chat-box').append(html);
+			var html = '';
+					/** chat item **/
+			html = '<div class="item">' +
+						'<img src="'+ CI.base_url + 'img/'+ image +'" alt="user image" class="offline"/>' +
+						'<p class="message">' +
+							'<a href="#" class="name">' +
+								'<small class="text-muted pull-right"><i class="fa fa-clock-o"></i>'+ fomat_date +'</small>' +
+								'<?php echo $user->first_name; ?>' +
+							'</a>' +
+							mensaje + 
+						'</p>' +
+					'</div>';
+					/** /.item **/
 
-		// 	var container = $('#chat-box');
-		// 	height_value = container[0].scrollHeight;
+			$('#chat-box').append(html);
 
-		// 	$(".slimScrollBar").css({ top: height_value + 'px' });
-		// 	container[0].scrollTop = height_value;
-		// }
+			var container = $('#chat-box');
+			height_value = container[0].scrollHeight;
+
+			$(".slimScrollBar").css({ top: height_value + 'px' });
+			container[0].scrollTop = height_value;
+		}
 
 		$('#end').click(function (event) {
 			

@@ -95,6 +95,7 @@ class Asuntos extends CI_Controller {
 		$this->data_detail['cod_consulta'] = $cod_consulta;
 		$this->data_detail['nro_detalle'] = 1;
 		$this->data_detail['tipo'] = $user->type;// usuario 0 y consultor 1
+		// $this->data_detail['fecha'] = date('Y/m/d H:i:s');
 		$this->data_detail['fecha'] = date('d/m/Y H:i:s');
 
 		$this->table_consulta_detalle = $this->asuntos_model->get_fields('Consulta_Detalle');
@@ -131,8 +132,10 @@ class Asuntos extends CI_Controller {
 	{
 		$cod_categoria = $this->input->post('group_id');
 		$cod_consulta = $this->input->post('cod_consulta');
+		// $fecha_cierre = date('Y/m/d');
+		$fecha_cierre = date('d/m/Y');
 
-		$data_update = array( 'estado' => 0, 'fecha_cierre' => date('d/m/Y H:i:s') );
+		$data_update = array( 'estado' => 0, 'fecha_cierre' => $fecha_cierre );
 		$condicional = array( 'group_id' => $cod_categoria, 'cod_consulta' => $cod_consulta );
 
 		$this->result = $this->asuntos_model->update_data( $data_update, 'Consulta', $condicional );
