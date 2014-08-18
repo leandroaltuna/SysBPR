@@ -56,6 +56,7 @@ $lang['deactivate_validation_user_id_label'] = 'user ID';
 $lang['create_user_heading']                           = 'Create User';
 $lang['create_user_subheading']                        = 'Please enter the user\'s information below.';
 $lang['create_user_username_label']                    = 'Username:';
+$lang['create_user_type_label']                        = 'User Type:';
 $lang['create_user_fname_label']                       = 'First Name:';
 $lang['create_user_lname_label']                       = 'Last Name:';
 $lang['create_user_company_label']                     = 'Company Name:';

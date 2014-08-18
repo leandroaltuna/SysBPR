@@ -155,6 +155,10 @@
 
 				new_message();
 
+				setInterval(function() {
+					new_message();
+				}, 7000);
+
 				function new_message ()
 				{
 					var html = '';
@@ -172,14 +176,14 @@
 										'<span class="label label-success">'+ number +'</span>' +
 									'</a>';
 							html += '<ul class="dropdown-menu">' +
-										'<li class="header"> Ud. tiene ' + number + ' mensajes </li>' +
+										'<li class="header"> Ud. tiene ' + json_data.alert + ' mensajes </li>' +
 										'<li>' +
 											// inner menu: contains the actual data //
 											'<ul class="menu">';
 											$.each( json_data.contenido, 
 													function(i, datos)
 													{
-														html += description_message( datos.group_id, datos.cod_consulta, datos.asunto);
+														html += description_message( datos.group_id, datos.name, datos.cod_consulta, datos.asunto);
 													}
 												);
 							html +=			'</ul>' +
@@ -194,17 +198,17 @@
 					});
 				}
 
-				function description_message ( categoria, consulta, issues )
+				function description_message ( categoria, name_categoria, consulta, issues )
 				{
 					
 					// start message //
 					contenido = '<li>' +
 									'<a href="'+ CI.site_url +'/conversacion/'+ categoria +'/'+ consulta +'">' +
 										'<div class="pull-left">' +
-											'<img src="'+ CI.base_url +'img/avatar3.png" class="img-circle" alt="User Image"/>' +
+											'<img src="'+ CI.base_url +'img/avatar04.png" class="img-circle" alt="User Image"/>' +
 										'</div>' +
 										'<h4>' +
-											'Support Team' +
+											name_categoria +
 											//'<small><i class="fa fa-clock-o"></i> 5 mins</small>' +
 										'</h4>' +
 										'<p>'+ issues +'</p>' +

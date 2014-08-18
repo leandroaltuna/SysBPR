@@ -18,6 +18,8 @@
 		<link href="<?php echo base_url('css/datepicker/datepicker3.css'); ?>" rel="stylesheet" type="text/css" />
 		<!-- Daterange picker -->
 		<link href="<?php echo base_url('css/daterangepicker/daterangepicker-bs3.css'); ?>" rel="stylesheet" type="text/css" />
+		<!-- DATA TABLES -->
+        <link href="<?php echo base_url('css/datatables/dataTables.bootstrap.css'); ?>" rel="stylesheet" type="text/css" />
 		<!-- bootstrap wysihtml5 - text editor -->
 		<link href="<?php echo base_url('css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); ?>" rel="stylesheet" type="text/css" />
 		<!-- Theme style -->

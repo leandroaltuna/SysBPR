@@ -24,62 +24,78 @@
 		<div class="row">
 			<section class="col-lg-10">
 				<!-- TO DO List -->
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header">
 						<i class="ion ion-clipboard"></i>
 						<h3 class="box-title">Lista de Asuntos</h3>
-						<!-- <div class="box-tools pull-right">
-							<ul class="pagination pagination-sm inline">
-								<li><a href="#">&laquo;</a></li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">&raquo;</a></li>
-							</ul>
-						</div> -->
+						<div class="box-tools pull-right">
+							<?php 
+								if ( $user->type == 0 )
+								{
+							?>
+								<a href="<?php echo site_url('asuntos/nuevo_asunto').'/'.$categoria; ?>" class="btn btn-default pull-right">
+									<i class="fa fa-plus"></i> Agregar Asunto
+								</a>
+							<?php
+								}
+							?>
+						</div>
 					</div><!-- /.box-header -->
-					<div class="box-body">
-						<ul class="todo-list">
-					<?php 
-						foreach ($contenido as $fila)
-						{
-					?>
-							<li class="active">
-								<!-- drag handle -->
-								<!-- <span class="handle"> -->
-								<span>
-									<i class="fa fa-ellipsis-v"></i>
-									<i class="fa fa-ellipsis-v"></i>
-								</span>
-								<!-- checkbox -->
-								<!-- <input type="checkbox" value="" name="" checked="true" /> -->
-								<!-- todo text -->
-								<?php 
-									$class_text = ( $fila->estado == 0 ) ? 'text-muted' : 'text-light-blue';
-								?>
-								<span class="text <?php echo $class_text; ?>"><?php echo $fila->asunto; ?></span>
-								<!-- Emphasis label -->
-								<!-- <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small> -->
-								<!-- General tools such as edit or delete-->
-								<div class="tools">
-									<a href="<?php echo site_url('conversacion').'/'.$categoria.'/'.$fila->cod_consulta; ?>">
-										<i class="fa fa-edit"></i>
-									</a>
-									<!-- <a href="#">
-										<i class="fa fa-power-off"></i>
-									</a> -->
-								</div>
-							</li>
-					<?php
-						}
-					?>
+					<div class="box-body table-responsive">
+						<table id="example1" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Codigo</th>
+									<th>Asunto</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+								foreach ($contenido as $fila)
+								{
+							?>
+								<tr>
+									<td>
+										<a href="<?php echo site_url('conversacion').'/'.$categoria.'/'.$fila->cod_consulta; ?>">
+											<?php echo trim($fila->username); ?>
+										</a>
+									</td>
+									<td>
+										<?php 
+											$class_text = ( $fila->estado == 0 ) ? 'text-muted' : 'text-light-blue';
+										?>
+										<span class="text <?php echo $class_text; ?>"><?php echo $fila->asunto; ?></span>
+									</td>
+								</tr>
+							<?php
+								}
+							?>
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Codigo</th>
+									<th>Asunto</th>
+								</tr>
+							</tfoot>
+						</table>
 					</div><!-- /.box-body -->
-					<div class="box-footer clearfix no-border">
-						<a href="<?php echo site_url('asuntos/nuevo_asunto').'/'.$categoria; ?>" class="btn btn-default pull-right">
-							<i class="fa fa-plus"></i> Agregar Asunto
-						</a>
-					</div>
 				</div><!-- /.box -->
 			</section>
 		</div><!-- /.row -->
 	</section>
+	<!-- DATA TABES SCRIPT -->
+	<script src="<?php echo base_url('js/plugins/datatables/jquery.dataTables.js'); ?>" type="text/javascript"></script>
+	<script src="<?php echo base_url('js/plugins/datatables/dataTables.bootstrap.js'); ?>" type="text/javascript"></script>
+
+	<!-- page script -->
+	<script type="text/javascript">
+		$(function() {
+			$("#example1").dataTable({
+				"bAutoWidth": false,
+				"aoColumns" : [
+					{ sWidth: '2%' },
+					{ sWidth: '50%' },
+				]
+			});
+		});
+	</script>
