@@ -65,7 +65,7 @@
 					'required'		=> 'true',
 					'autofocus'		=> 'true',
 					'onkeyup'		=> 'check_values()',
-					'maxlength'		=> 8
+					'maxlength'		=> 11
 				);
 
 	$password = array(
@@ -74,7 +74,8 @@
 					'class'			=> 'form-control',
 					'placeholder' 	=> 'Password',
 					'required'		=> 'true',
-					'onkeyup'		=> 'check_values()'
+					'onkeyup'		=> 'check_values()',
+					'maxlength'		=> 11
 				);
 
 	?>

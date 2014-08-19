@@ -17,81 +17,7 @@
 					<ul class="nav navbar-nav">
 						<!-- Messages: style can be found in dropdown.less-->
 						<li id="alert_messages" name="alert_messages" class="dropdown messages-menu">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-envelope"></i>
-								<span class="label label-success">4</span>
-							</a>
-							<ul class="dropdown-menu">
-								<li class="header">You have 4 messages</li>
-								<li>
-									<!-- inner menu: contains the actual data -->
-									<ul class="menu">
-										<li><!-- start message -->
-											<a href="#">
-												<div class="pull-left">
-													<img src="<?php echo base_url('img/avatar3.png') ?>" class="img-circle" alt="User Image"/>
-												</div>
-												<h4>
-													Support Team
-													<small><i class="fa fa-clock-o"></i> 5 mins</small>
-												</h4>
-												<p>Why not buy a new awesome theme?</p>
-											</a>
-										</li><!-- end message -->
-										<li>
-											<a href="#">
-												<div class="pull-left">
-													<img src="<?php echo base_url('img/avatar2.png') ?>" class="img-circle" alt="user image"/>
-												</div>
-												<h4>
-													AdminLTE Design Team
-													<small><i class="fa fa-clock-o"></i> 2 hours</small>
-												</h4>
-												<p>Why not buy a new awesome theme?</p>
-											</a>
-										</li>
-										<li>
-										<a href="#">
-											<div class="pull-left">
-												<img src="<?php echo base_url('img/avatar.png') ?>" class="img-circle" alt="user image"/>
-											</div>
-											<h4>
-												Developers
-												<small><i class="fa fa-clock-o"></i> Today</small>
-											</h4>
-											<p>Why not buy a new awesome theme?</p>
-										</a>
-										</li>
-										<li>
-											<a href="#">
-												<div class="pull-left">
-													<img src="<?php echo base_url('img/avatar2.png') ?>" class="img-circle" alt="user image"/>
-												</div>
-												<h4>
-													Sales Department
-													<small><i class="fa fa-clock-o"></i> Yesterday</small>
-												</h4>
-												<p>Why not buy a new awesome theme?</p>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<div class="pull-left">
-													<img src="<?php echo base_url('img/avatar.png'); ?>" class="img-circle" alt="user image"/>
-												</div>
-												<h4>
-													Reviewers
-													<small><i class="fa fa-clock-o"></i> 2 days</small>
-												</h4>
-												<p>Why not buy a new awesome theme?</p>
-											</a>
-										</li>
-									</ul>
-								</li>
-								<li class="footer">
-									<a href="#">See All Messages</a>
-								</li>
-							</ul>
+							<!-- AJAX -->
 						</li>
 						<!-- User Account: style can be found in dropdown.less -->
 						<li class="dropdown user user-menu">
@@ -115,6 +41,12 @@
 									<img src="<?php echo base_url('img/avatar.png'); ?>" class="img-circle" alt="User Image" />
 								<?php 
 									}
+									elseif ( $user->type == 2 )
+									{
+								?>
+									<img src="<?php echo base_url('img/avatar2.png'); ?>" class="img-circle" alt="User Image" />
+								<?php	
+									}
 								?>
 									<p>
 										<?php echo $user->first_name.' '.$user->last_name; ?> - <?php echo $user->company; ?>
@@ -135,9 +67,9 @@
 								</li> -->
 								<!-- Menu Footer-->
 								<li class="user-footer">
-									<!-- <div class="pull-left">
-										<a href="#" class="btn btn-default btn-flat">Profile</a>
-									</div> -->
+									<div class="pull-left">
+										<a href="<?php echo site_url('auth/change_password'); ?>" class="btn btn-default btn-flat">Cambiar Clave</a>
+									</div>
 									<div class="pull-right">
 										<a href="<?php echo site_url('auth/logout'); ?>" class="btn btn-default btn-flat">Salir</a>
 									</div>

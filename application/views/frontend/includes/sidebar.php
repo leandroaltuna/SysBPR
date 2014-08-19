@@ -18,6 +18,12 @@
 							<img src="<?php echo base_url('img/avatar.png'); ?>" class="img-circle" alt="User Image" />
 						<?php 
 							}
+							elseif ( $user->type == 2 )
+							{
+						?>	
+							<img src="<?php echo base_url('img/avatar2.png'); ?>" class="img-circle" alt="User Image" />
+						<?php 	
+							}
 						?>
 						</div>
 						<div class="pull-left info">

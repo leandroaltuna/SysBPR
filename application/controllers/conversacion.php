@@ -160,6 +160,11 @@ class Conversacion extends CI_Controller {
 			// si es un consultor la condicional es por usernam_consultor //
 			$condicional = 'username_consultor = '.$user->username.' and tipo = '.$user->type;
 		}
+		elseif ( $user->type == 2 )
+		{
+			// si es un administrador la condicional es por usernam_consultor //
+			$condicional = 'username_consultor = '.$user->username.' and tipo = '.$user->type;
+		}
 		$group = array('group_id', 'cod_consulta', 'username');
 
 		// obtengo los ultimos nro_detalle de mi usuario //

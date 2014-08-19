@@ -454,6 +454,32 @@ class Ion_auth
 	}
 
 	/**
+	 * is_admin_by_type
+	 *
+	 * @return bool
+	 * @author Ben Edmunds
+	 **/
+	public function is_admin_by_type($id=false)
+	{
+		$this->ion_auth_model->trigger_events('is_admin_by_type');
+
+		$type_admin = $this->config->item('type_admin', 'ion_auth');
+
+		$user = $this->ion_auth_model->user($id)->row();
+
+		if ( $user->type == $type_admin )
+		{
+			$check = true;
+		}
+		else
+		{
+			$check = false;
+		}
+
+		return $check;
+	}
+
+	/**
 	 * in_group
 	 *
 	 * @param mixed group(s) to check

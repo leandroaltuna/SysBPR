@@ -25,19 +25,22 @@ class Auth extends CI_Controller {
 	function index()
 	{
 
-		if ($this->ion_auth->logged_in()) {
+		// if ($this->ion_auth->logged_in()) {
 			
-			redirect('contactos');
+		// 	redirect('contactos');
 
-		}else if (!$this->ion_auth->logged_in())
+		// }else 
+		if (!$this->ion_auth->logged_in())
 		{
 			//redirect them to the login page
 			redirect('auth/login', 'refresh');
 		}
-		elseif (!$this->ion_auth->is_admin()) //remove this elseif if you want to enable this for non-admins
+		// elseif (!$this->ion_auth->is_admin()) //remove this elseif if you want to enable this for non-admins
+		elseif (!$this->ion_auth->is_admin_by_type())
 		{
 			//redirect them to the home page because they must be an administrator to view this
-			return show_error('You must be an administrator to view this page.');
+			// return show_error('You must be an administrator to view this page.');
+			redirect('contactos');
 		}
 		else
 		{
@@ -51,7 +54,10 @@ class Auth extends CI_Controller {
 				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
 
-			$this->_render_page('auth/index', $this->data);
+			// $this->_render_page('auth/index', $this->data);
+			$this->data['user'] = $this->ion_auth->user()->row();
+			$this->data['main_content'] = 'auth/index';
+			$this->load->view('frontend/template', $this->data);
 		}
 	}
 
@@ -166,7 +172,11 @@ class Auth extends CI_Controller {
 			);
 
 			//render
-			$this->_render_page('auth/change_password', $this->data);
+			// $this->_render_page('auth/change_password', $this->data);
+			$this->data['user'] = $user;
+			$this->data['main_content'] = 'auth/change_password';
+			$this->load->view('frontend/template', $this->data);
+
 		}
 		else
 		{
@@ -370,7 +380,10 @@ class Auth extends CI_Controller {
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['user'] = $this->ion_auth->user($id)->row();
 
-			$this->_render_page('auth/deactivate_user', $this->data);
+			// $this->_render_page('auth/deactivate_user', $this->data);
+			$this->data['main_content'] = 'auth/deactivate_user';
+			$this->load->view('frontend/template', $this->data);
+
 		}
 		else
 		{
@@ -401,9 +414,10 @@ class Auth extends CI_Controller {
 		$this->data['title'] = "Create User";
 
 		// if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
-		// {
-		// 	redirect('auth', 'refresh');
-		// }
+		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin_by_type())
+		{
+			redirect('auth', 'refresh');
+		}
 
 		//validate form input
 		$this->form_validation->set_rules('username', $this->lang->line('create_user_validation_username_label'), 'required|xss_clean');
@@ -501,7 +515,10 @@ class Auth extends CI_Controller {
 				'value' => $this->form_validation->set_value('password_confirm'),
 			);
 
-			$this->_render_page('auth/create_user', $this->data);
+			// $this->_render_page('auth/create_user', $this->data);
+			$this->data['user'] = $this->ion_auth->user()->row();
+			$this->data['main_content'] = 'auth/create_user';
+			$this->load->view('frontend/template', $this->data);
 		}
 	}
 
@@ -510,7 +527,8 @@ class Auth extends CI_Controller {
 	{
 		$this->data['title'] = "Edit User";
 
-		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+		// if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin_by_type())
 		{
 			redirect('auth', 'refresh');
 		}
@@ -529,10 +547,10 @@ class Auth extends CI_Controller {
 		if (isset($_POST) && !empty($_POST))
 		{
 			// do we have a valid request?
-			if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id'))
-			{
-				show_error($this->lang->line('error_csrf'));
-			}
+			// if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id'))
+			// {
+			// 	show_error($this->lang->line('error_csrf'));
+			// }
 
 			$data = array(
 				'first_name' => $this->input->post('first_name'),
@@ -626,7 +644,11 @@ class Auth extends CI_Controller {
 			'type' => 'password'
 		);
 
-		$this->_render_page('auth/edit_user', $this->data);
+		// $this->_render_page('auth/edit_user', $this->data);
+
+		$this->data['user'] = $this->ion_auth->user()->row();
+		$this->data['main_content'] = 'auth/edit_user';
+		$this->load->view('frontend/template', $this->data);
 	}
 
 	// create a new group
@@ -634,7 +656,8 @@ class Auth extends CI_Controller {
 	{
 		$this->data['title'] = $this->lang->line('create_group_title');
 
-		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+		// if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin_by_type())
 		{
 			redirect('auth', 'refresh');
 		}
@@ -673,7 +696,11 @@ class Auth extends CI_Controller {
 				'value' => $this->form_validation->set_value('description'),
 			);
 
-			$this->_render_page('auth/create_group', $this->data);
+			// $this->_render_page('auth/create_group', $this->data);
+			$this->data['user'] = $this->ion_auth->user()->row();
+			$this->data['main_content'] = 'auth/create_group';
+			$this->load->view('frontend/template', $this->data);
+
 		}
 	}
 
