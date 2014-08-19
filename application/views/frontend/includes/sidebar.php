@@ -5,26 +5,7 @@
 					<!-- Sidebar user panel -->
 					<div class="user-panel">
 						<div class="pull-left image">
-						<?php 
-							if ( $user->type == 0 ) 
-							{
-						?>
-							<img src="<?php echo base_url('img/avatar04.png'); ?>" class="img-circle" alt="User Image" />
-						<?php 
-							} 
-							else if( $user->type == 1 )
-							{
-						?>
-							<img src="<?php echo base_url('img/avatar.png'); ?>" class="img-circle" alt="User Image" />
-						<?php 
-							}
-							elseif ( $user->type == 2 )
-							{
-						?>	
-							<img src="<?php echo base_url('img/avatar2.png'); ?>" class="img-circle" alt="User Image" />
-						<?php 	
-							}
-						?>
+							<img src="<?php echo base_url('img').'/'.$user->image; ?>" class="img-circle" alt="User Image" />
 						</div>
 						<div class="pull-left info">
 							<p>Hola, <?php echo $user->first_name; ?></p>

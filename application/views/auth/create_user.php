@@ -53,6 +53,11 @@
                                                 <?php echo form_input($phone);?>
                                           </p>
 
+                                           <p>
+                                                <?php echo lang('create_user_image_label', 'image');?> <br />
+                                                <?php echo form_input($image);?>
+                                          </p>
+
                                           <p>
                                                 <?php echo lang('create_user_password_label', 'password');?> <br />
                                                 <?php echo form_input($password);?>

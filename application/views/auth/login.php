@@ -61,7 +61,7 @@
 					'name' 			=> 'identity',
 					'value' 		=> '',
 					'class'			=> 'form-control',
-					'placeholder' 	=> 'DNI',
+					'placeholder' 	=> 'RUC',
 					'required'		=> 'true',
 					'autofocus'		=> 'true',
 					'onkeyup'		=> 'check_values()',
@@ -72,7 +72,7 @@
 					'id' 			=> 'password',
 					'name' 			=> 'password',
 					'class'			=> 'form-control',
-					'placeholder' 	=> 'Password',
+					'placeholder' 	=> 'Clave',
 					'required'		=> 'true',
 					'onkeyup'		=> 'check_values()',
 					'maxlength'		=> 11

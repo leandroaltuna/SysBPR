@@ -39,6 +39,11 @@
                                           </p>
 
                                           <p>
+                                                <?php echo lang('edit_user_image_label', 'image');?> <br />
+                                                <?php echo form_input($image);?>
+                                          </p>
+
+                                          <p>
                                                 <?php echo lang('edit_user_password_label', 'password');?> <br />
                                                 <?php echo form_input($password);?>
                                           </p>

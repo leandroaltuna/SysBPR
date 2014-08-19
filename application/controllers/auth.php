@@ -421,7 +421,8 @@ class Auth extends CI_Controller {
 
 		//validate form input
 		$this->form_validation->set_rules('username', $this->lang->line('create_user_validation_username_label'), 'required|xss_clean');
-		$this->form_validation->set_rules('type', $this->lang->line('create_user_validation_username_label'), 'required|xss_clean');
+		$this->form_validation->set_rules('type', $this->lang->line('create_user_validation_type_label'), 'required|xss_clean');
+		$this->form_validation->set_rules('image', $this->lang->line('create_image_validation_type_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('last_name', $this->lang->line('create_user_validation_lname_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email|is_unique[users.email]');
@@ -443,6 +444,7 @@ class Auth extends CI_Controller {
 				'company'    => $this->input->post('company'),
 				'phone'      => $this->input->post('phone'),
 				'type'		 => $this->input->post('type'),
+				'image'		 => $this->input->post('image'),
 			);
 		}
 		if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data))
@@ -463,14 +465,20 @@ class Auth extends CI_Controller {
 				'id'    => 'username',
 				'type'  => 'text',				
 				'value' => $this->form_validation->set_value('username'),
-				'maxlength' => 8,
+				'maxlength' => 11,
 			);
 			$this->data['type'] = array(
 				'name'  => 'type',
 				'id'    => 'type',
 				'type'  => 'text',				
 				'value' => $this->form_validation->set_value('type'),
-				'maxlength' => 8,
+				'maxlength' => 1,
+			);
+			$this->data['image'] = array(
+				'name'  => 'image',
+				'id'    => 'image',
+				'type'  => 'text',				
+				'value' => $this->form_validation->set_value('image'),
 			);
 			$this->data['first_name'] = array(
 				'name'  => 'first_name',
@@ -541,6 +549,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'required|xss_clean');
+		$this->form_validation->set_rules('image', $this->lang->line('edit_user_validation_image_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'required|xss_clean');
 		$this->form_validation->set_rules('groups', $this->lang->line('edit_user_validation_groups_label'), 'xss_clean');
 
@@ -557,6 +566,7 @@ class Auth extends CI_Controller {
 				'last_name'  => $this->input->post('last_name'),
 				'company'    => $this->input->post('company'),
 				'phone'      => $this->input->post('phone'),
+				'image'      => $this->input->post('image'),
 			);
 
 			//Update the groups user belongs to
@@ -630,6 +640,13 @@ class Auth extends CI_Controller {
 			'type'  => 'text',
 			'class'	=> 'form-control',
 			'value' => $this->form_validation->set_value('phone', $user->phone),
+		);
+		$this->data['image'] = array(
+			'name'  => 'image',
+			'id'    => 'image',
+			'type'  => 'text',
+			'class'	=> 'form-control',
+			'value' => $this->form_validation->set_value('image', $user->image),
 		);
 		$this->data['password'] = array(
 			'name' => 'password',

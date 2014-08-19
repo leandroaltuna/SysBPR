@@ -28,26 +28,7 @@
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header bg-light-blue">
-								<?php 
-									if ( $user->type == 0 ) 
-									{
-								?>
-									<img src="<?php echo base_url('img/avatar04.png'); ?>" class="img-circle" alt="User Image" />
-								<?php 
-									} 
-									else if( $user->type == 1 )
-									{
-								?>
-									<img src="<?php echo base_url('img/avatar.png'); ?>" class="img-circle" alt="User Image" />
-								<?php 
-									}
-									elseif ( $user->type == 2 )
-									{
-								?>
-									<img src="<?php echo base_url('img/avatar2.png'); ?>" class="img-circle" alt="User Image" />
-								<?php	
-									}
-								?>
+									<img src="<?php echo base_url('img').'/'.$user->image; ?>" class="img-circle" alt="User Image" />
 									<p>
 										<?php echo $user->first_name.' '.$user->last_name; ?> - <?php echo $user->company; ?>
 										<!-- <small>Member since Nov. 2012</small> -->
@@ -136,9 +117,9 @@
 					// start message //
 					contenido = '<li>' +
 									'<a href="'+ CI.site_url +'/conversacion/'+ categoria +'/'+ consulta +'">' +
-										'<div class="pull-left">' +
-											'<img src="'+ CI.base_url +'img/avatar04.png" class="img-circle" alt="User Image"/>' +
-										'</div>' +
+										// '<div class="pull-left">' +
+										// 	'<img src="'+ CI.base_url +'img/' + user_image + '" class="img-circle" alt="User Image"/>' +
+										// '</div>' +
 										'<h4>' +
 											name_categoria +
 											//'<small><i class="fa fa-clock-o"></i> 5 mins</small>' +

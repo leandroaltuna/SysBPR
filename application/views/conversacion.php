@@ -45,6 +45,10 @@
 									{
 										$disabled = 'disabled="true"';
 									}
+									elseif ( $user->type == 0 && $user->username != $cabecera->username )
+									{
+										$disabled = 'disabled="true"';
+									}
 								?>
 								<button type="button" id="end" name="end" <?php echo $disabled; ?> class="btn btn-default btn-sm">
 									<i class="fa fa-square text-red"></i>
@@ -109,13 +113,15 @@
 								html += '<div class="item">';
 											if ( datos.tipo == 0 )
 											{
-												name_image = 'avatar04.png';
+												name_image = datos.image;
 												class_image = 'offline';
+												nombre_completo = datos.first_name + ' ' + datos.last_name;
 											}
 											else
 											{
-												name_image = 'avatar.png';
+												name_image = datos.image_consultor;
 												class_image = 'online';
+												nombre_completo = datos.name_consultor;
 											}
 
 									html += '<img src="'+ CI.base_url +'img/'+ name_image +'" alt="usuario" class="'+ class_image +'"/>' +
@@ -124,7 +130,7 @@
 												'<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ' +
 													datos.fecha +
 												'</small>' +
-												datos.first_name +
+												nombre_completo +
 											'</a>' +
 											datos.mensaje +
 											'</p>' +
@@ -177,7 +183,6 @@
 					{
 						if ( json.estado == 1 )
 						{
-							// add_mensaje( mensaje );
 							view_chat();
 						} else {
 							alert(json.msg);
@@ -197,40 +202,6 @@
 			$('#enviar').trigger('click');
 		});
 
-		// function add_mensaje( mensaje )
-		// {
-		// 	var currentdate = new Date();
-		// 	var fomat_date = currentdate.getDate() + "/"
-		// 					+ (currentdate.getMonth()+1)  + "/" 
-		// 					+ currentdate.getFullYear() + " "  
-		// 					+ currentdate.getHours() + ":"  
-		// 					+ currentdate.getMinutes();
-
-		// 	var tipo = '<?php echo $user->type; ?>';
-		// 	image = ( parseInt(tipo) == 0) ? 'avatar04.png' : 'avatar.png';
-
-		// 	var html = '';
-		// 			/** chat item **/
-		// 	html = '<div class="item">' +
-		// 				'<img src="'+ CI.base_url + 'img/'+ image +'" alt="user image" class="offline"/>' +
-		// 				'<p class="message">' +
-		// 					'<a href="#" class="name">' +
-		// 						'<small class="text-muted pull-right"><i class="fa fa-clock-o"></i>'+ fomat_date +'</small>' +
-		// 						'<?php echo $user->first_name; ?>' +
-		// 					'</a>' +
-		// 					mensaje + 
-		// 				'</p>' +
-		// 			'</div>';
-		// 			/** /.item **/
-
-		// 	$('#chat-box').append(html);
-
-		// 	var container = $('#chat-box');
-		// 	height_value = container[0].scrollHeight;
-
-		// 	$(".slimScrollBar").css({ top: height_value + 'px' });
-		// 	container[0].scrollTop = height_value;
-		// }
 
 		$('#end').click(function (event) {
 			

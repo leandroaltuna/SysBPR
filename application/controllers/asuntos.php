@@ -26,7 +26,7 @@ class Asuntos extends CI_Controller {
 		$this->parameters['description'] = 'Temas de Conversacion';
 		$this->parameters['main_content'] = 'asuntos';
 		$this->parameters['categoria'] = $cod_categoria;
-
+	
 		$user = $this->ion_auth->user()->row();
 		$this->parameters['user'] = $user;
 		$user_type = $user->type;
@@ -43,6 +43,13 @@ class Asuntos extends CI_Controller {
 		$sorted = 'estado desc';
 
 		$this->parameters['contenido'] = $this->asuntos_model->sorted_data_selection( 'Consulta', $condicional, $sorted )->result();
+		$this->parameters['contenido_adicional'] = array();
+
+		if ( $user_type == 0 )
+		{
+			$condicional = ' username <> '.$user->username.' and group_id = '.$cod_categoria;
+			$this->parameters['contenido_adicional'] = $this->asuntos_model->sorted_data_selection( 'Consulta', $condicional, $sorted )->result();
+		}
 
 		$this->load->view('frontend/template', $this->parameters);
 	}
@@ -65,6 +72,7 @@ class Asuntos extends CI_Controller {
 	{
 		$cod_categoria = $this->input->post('group_id');
 		$user = $this->ion_auth->user()->row();
+		$group = $this->ion_auth->group($cod_categoria)->row();
 
 		$this->condicional = array( 'group_id' => $cod_categoria);
 
@@ -74,10 +82,11 @@ class Asuntos extends CI_Controller {
 
 		$this->table_consulta = $this->asuntos_model->get_fields('Consulta');
 
-		$this->array_fields = array( 'username', 'cod_consulta', 'estado' );
+		$this->array_fields = array( 'username', 'cod_consulta', 'estado', 'initial' );
 
 		$this->data_master['username'] = $user->username;
 		$this->data_master['cod_consulta'] = $cod_consulta;
+		$this->data_master['initial'] = $group->initial;
 		$this->data_master['estado'] = 1;
 
 		foreach ($this->table_consulta as $key => $name_field)

@@ -31,10 +31,6 @@ class Conversacion extends CI_Controller {
 		$condicional = array( 'group_id' => $cod_categoria, 'cod_consulta' => $cod_consulta );
 		$this->parameters['cabecera'] = $this->conversacion_model->select_data('Consulta', $condicional)->row();
 
-		$join = 'Consulta_Detalle.username = users.username';
-		$sorted = 'nro_detalle asc';
-		// $this->parameters['contenido'] = $this->conversacion_model->select_data_join( 'Consulta_Detalle', 'users', $join, $condicional, $sorted )->result();
-
 		$this->load->view('frontend/template', $this->parameters);
 	}
 
@@ -43,13 +39,13 @@ class Conversacion extends CI_Controller {
 		$cod_categoria = $this->input->post('group_id');
 		$cod_consulta = $this->input->post('cod_consulta');
 
-		$selected = "Consulta_Detalle.username, Consulta_Detalle.cod_consulta, Consulta_Detalle.nro_detalle, Consulta_Detalle.group_id,Consulta_Detalle.mensaje, Consulta_Detalle.tipo, ( RTRIM(CONVERT(char, Consulta_Detalle.fecha,103)) + ' ' + RTRIM(CONVERT(char, Consulta_Detalle.fecha,108))) as fecha, users.type, users.first_name, users.last_name";
+		$selected = "Consulta_Detalle.username, Consulta_Detalle.cod_consulta, Consulta_Detalle.nro_detalle, Consulta_Detalle.group_id,Consulta_Detalle.mensaje, Consulta_Detalle.tipo, ( RTRIM(CONVERT(char, Consulta_Detalle.fecha,103)) + ' ' + RTRIM(CONVERT(char, Consulta_Detalle.fecha,108))) as fecha, users.type, users.first_name, users.last_name, users.image, ISNULL((SELECT (users.first_name + ' ' + users.last_name) as name_consultor FROM users WHERE users.username = Consulta_Detalle.username_consultor ), '') as name_consultor, ISNULL((SELECT users.image FROM users WHERE users.username = Consulta_Detalle.username_consultor ), '') as image_consultor";
 		$condicional = 'group_id = '.$cod_categoria.' and cod_consulta = '.$cod_consulta;
 		$join = 'Consulta_Detalle.username = users.username';
 		$sorted = 'nro_detalle asc';
 
 		$query = "SELECT ".$selected." FROM Consulta_Detalle JOIN users ON ".$join." WHERE ".$condicional." ORDER BY ".$sorted;
-		// $this->parameters['contenido'] = $this->conversacion_model->select_data_join( $selected, 'Consulta_Detalle', 'users', $join, $condicional, $sorted )->result();
+	
 		$this->parameters['contenido'] = $this->conversacion_model->select_with_query( $query )->result();
 
 		$data['datos'] = $this->parameters;
@@ -168,7 +164,6 @@ class Conversacion extends CI_Controller {
 		$group = array('group_id', 'cod_consulta', 'username');
 
 		// obtengo los ultimos nro_detalle de mi usuario //
-		// $this->max_detalle = $this->conversacion_model->select_data_new_message( $selected, 'Consulta_Detalle', $condicional, $group )->result();
 		$query = "SELECT ".$selected." FROM Consulta_Detalle WHERE ".$condicional." GROUP BY ".implode(',', $group);
 		$this->max_detalle = $this->conversacion_model->select_with_query( $query )->result();
 
@@ -178,7 +173,7 @@ class Conversacion extends CI_Controller {
 			$selected = 'CD.username, CD.cod_consulta, CD.group_id';
 			$condicional = "CD.username = '".$row->username."' and CD.cod_consulta = ".$row->cod_consulta." and CD.group_id = ".$row->group_id." and CD.nro_detalle > ".$row->nro_detalle." and C.estado = 1";
 			$group = array('CD.group_id', 'CD.cod_consulta', 'CD.username');
-			// $this->key_new_message = $this->conversacion_model->select_data_new_message( $selected, 'Consulta_Detalle', $condicional, $group )->row();
+
 			$query = "SELECT ".$selected." FROM Consulta_Detalle CD JOIN Consulta C ON CD.username = C.username and CD.cod_consulta = C.cod_consulta and CD.group_id = C.group_id WHERE ".$condicional."  GROUP BY ".implode(',', $group);
 			$this->key_new_message = $this->conversacion_model->select_with_query( $query )->row();
 
@@ -203,7 +198,7 @@ class Conversacion extends CI_Controller {
 				$selected = 'Consulta.*, groups.name';
 				$join = 'Consulta.group_id = groups.id';
 				$sorted = 'groups.id asc';
-				// $this->data = $this->conversacion_model->select_data_join( $selected, 'Consulta', 'groups', $join,  $condicional, $sorted )->row();
+				
 				$query = "SELECT ".$selected." FROM Consulta JOIN groups ON ".$join." WHERE ".$condicional." ORDER BY ".$sorted;
 				$this->data = $this->conversacion_model->select_with_query( $query )->row();
 
@@ -215,6 +210,7 @@ class Conversacion extends CI_Controller {
 
 		$this->parameters['contenido'] = $content;
 		$this->parameters['alert'] = $number_alert;
+		// $this->parameters['image'] = $user->image;
 		$data['datos'] = $this->parameters;
 		$this->load->view('frontend/json/json_view', $data);
 

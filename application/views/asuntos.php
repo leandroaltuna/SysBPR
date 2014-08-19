@@ -22,12 +22,22 @@
 	<section class="content">
 		<!-- Small boxes (Stat box) -->
 		<div class="row">
-			<section class="col-lg-10">
+			<?php
+				if ( $user->type == 0 )
+				{
+					$class_section = 'col-lg-6';
+				}
+				else
+				{
+					$class_section = 'col-lg-10';
+				}
+			?>
+			<section class="<?php echo $class_section; ?>">
 				<!-- TO DO List -->
 				<div class="box">
 					<div class="box-header">
 						<i class="ion ion-clipboard"></i>
-						<h3 class="box-title">Lista de Asuntos</h3>
+						<h3 class="box-title">Mis Consultas</h3>
 						<div class="box-tools pull-right">
 							<?php 
 								if ( $user->type == 0 )
@@ -57,7 +67,7 @@
 								<tr>
 									<td>
 										<a href="<?php echo site_url('conversacion').'/'.$categoria.'/'.$fila->cod_consulta; ?>">
-											<?php echo trim($fila->username); ?>
+											<?php echo trim($fila->initial).'-'.trim($fila->cod_consulta); ?>
 										</a>
 									</td>
 									<td>
@@ -81,6 +91,55 @@
 					</div><!-- /.box-body -->
 				</div><!-- /.box -->
 			</section>
+			<?php if ($user->type == 0): ?>
+				<section class="<?php echo $class_section; ?>">
+					<!-- TO DO List -->
+					<div class="box">
+						<div class="box-header">
+							<i class="ion ion-clipboard"></i>
+							<h3 class="box-title">Otras Consultas</h3>
+						</div><!-- /.box-header -->
+						<div class="box-body table-responsive">
+							<table id="example2" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Codigo</th>
+										<th>Asunto</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php 
+									foreach ($contenido_adicional as $fila)
+									{
+								?>
+									<tr>
+										<td>
+											<a href="<?php echo site_url('conversacion').'/'.$categoria.'/'.$fila->cod_consulta; ?>">
+												<?php echo trim($fila->initial).'-'.trim($fila->cod_consulta); ?>
+											</a>
+										</td>
+										<td>
+											<?php 
+												$class_text = ( $fila->estado == 0 ) ? 'text-muted' : 'text-light-blue';
+											?>
+											<span class="text <?php echo $class_text; ?>"><?php echo $fila->asunto; ?></span>
+										</td>
+									</tr>
+								<?php
+									}
+								?>
+								</tbody>
+								<tfoot>
+									<tr>
+										<th>Codigo</th>
+										<th>Asunto</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div><!-- /.box-body -->
+					</div><!-- /.box -->
+				</section>
+			<?php endif ?>
 		</div><!-- /.row -->
 	</section>
 	<!-- DATA TABES SCRIPT -->
@@ -91,6 +150,14 @@
 	<script type="text/javascript">
 		$(function() {
 			$("#example1").dataTable({
+				"bAutoWidth": false,
+				"aoColumns" : [
+					{ sWidth: '2%' },
+					{ sWidth: '50%' },
+				]
+			});
+
+			$("#example2").dataTable({
 				"bAutoWidth": false,
 				"aoColumns" : [
 					{ sWidth: '2%' },
