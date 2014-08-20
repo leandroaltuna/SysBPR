@@ -15,40 +15,54 @@ class Asuntos extends CI_Controller {
 		}
 
 		$this->load->model('asuntos_model');
+		$this->master_table = 'Consulta';
+		$this->detail_table = 'Consulta_Detalle';
+		$this->conditional = '';
+
+		$this->group = array();
+		$this->user = array();
+		$this->parameters = array();
+	}
+
+	function assign_header_variables( $cod_categoria, $main_content )
+	{
+		$this->group = $this->ion_auth->group($cod_categoria)->row();
+		$this->user = $this->ion_auth->user()->row();
+
+		$this->parameters['title'] = 'Consultas de '.$this->group->name;
+		$this->parameters['description'] = 'Temas de Conversacion';
+		$this->parameters['main_content'] = $main_content;
 	}
 
 	function index($cod_categoria = null)
 	{
 		$cod_categoria = ($cod_categoria == null) ? 0 : $cod_categoria;
-		$group = $this->ion_auth->group($cod_categoria)->row();
 
-		$this->parameters['title'] = 'Consultas de '.$group->name;
-		$this->parameters['description'] = 'Temas de Conversacion';
-		$this->parameters['main_content'] = 'asuntos';
-		$this->parameters['categoria'] = $cod_categoria;
-	
-		$user = $this->ion_auth->user()->row();
-		$this->parameters['user'] = $user;
-		$user_type = $user->type;
+		$this->assign_header_variables( $cod_categoria, 'asuntos');
 
-		if ( $user_type == 0) // usuario
+		$this->parameters['categoria'] = $this->group->id;
+		
+		$this->parameters['user'] = $this->user;
+		$type = $this->user->type;
+
+		if ( $type == 0 ) // usuario
 		{
-			$condicional = array( 'username' => $user->username, 'group_id' => $cod_categoria );
+			$this->conditional = 'username = '.$this->user->username.' and group_id = '.$this->group->id;
 		}
-		else if ( $user_type == 1 ) // consultor
+		else if ( $type == 1 ) // consultor
 		{
-			$condicional = array( 'group_id' => $cod_categoria );
+			$this->conditional = 'group_id = '.$this->group->id;
 		}
 
 		$sorted = 'estado desc';
 
-		$this->parameters['contenido'] = $this->asuntos_model->sorted_data_selection( 'Consulta', $condicional, $sorted )->result();
+		$this->parameters['contenido'] = $this->asuntos_model->sorted_data_selection( $this->master_table, $this->conditional, $sorted )->result();
 		$this->parameters['contenido_adicional'] = array();
 
-		if ( $user_type == 0 )
+		if ( $type == 0 )
 		{
-			$condicional = ' username <> '.$user->username.' and group_id = '.$cod_categoria;
-			$this->parameters['contenido_adicional'] = $this->asuntos_model->sorted_data_selection( 'Consulta', $condicional, $sorted )->result();
+			$this->conditional = 'username <> '.$this->user->username.' and group_id = '.$this->group->id;
+			$this->parameters['contenido_adicional'] = $this->asuntos_model->sorted_data_selection( $this->master_table, $this->conditional, $sorted )->result();
 		}
 
 		$this->load->view('frontend/template', $this->parameters);
@@ -57,13 +71,11 @@ class Asuntos extends CI_Controller {
 	function nuevo_asunto($cod_categoria = null)
 	{
 		$cod_categoria = ($cod_categoria == null) ? 0 : $cod_categoria;
-		$group = $this->ion_auth->group($cod_categoria)->row();
+
+		$this->assign_header_variables( $cod_categoria, 'nuevo_asunto' );
 		
-		$this->parameters['title'] = 'Consultas de '.$group->name;
-		$this->parameters['description'] = 'Tema de Conversacion';
-		$this->parameters['main_content'] = 'nuevo_asunto';
-		$this->parameters['categoria'] = $cod_categoria;
-		$this->parameters['user'] = $this->ion_auth->user()->row();
+		$this->parameters['categoria'] = $this->group->id;
+		$this->parameters['user'] = $this->user;
 
 		$this->load->view('frontend/template', $this->parameters);
 	}
@@ -71,55 +83,50 @@ class Asuntos extends CI_Controller {
 	function create_chat()
 	{
 		$cod_categoria = $this->input->post('group_id');
-		$user = $this->ion_auth->user()->row();
-		$group = $this->ion_auth->group($cod_categoria)->row();
 
-		$this->condicional = array( 'group_id' => $cod_categoria);
+		$this->user = $this->ion_auth->user()->row();
+		$this->group = $this->ion_auth->group($cod_categoria)->row();
 
-		$number = $this->asuntos_model->count_result( $this->condicional, 'Consulta' );
+		$this->conditional = 'group_id = '.$this->group->id;
+		$number = $this->asuntos_model->count_result( $this->conditional, $this->master_table );
 
-		$cod_consulta = $number + 1;
+		$new_cod_consulta = $number + 1;
 
-		$this->table_consulta = $this->asuntos_model->get_fields('Consulta');
+		$this->master_table_fields = $this->asuntos_model->get_fields( $this->master_table );
+		$this->fields_array = array( 'username', 'cod_consulta', 'estado', 'initial' );
 
-		$this->array_fields = array( 'username', 'cod_consulta', 'estado', 'initial' );
+		$this->master_data['username'] = $this->user->username;
+		$this->master_data['cod_consulta'] = $new_cod_consulta;
+		$this->master_data['initial'] = $this->group->initial;
+		$this->master_data['estado'] = 1;
 
-		$this->data_master['username'] = $user->username;
-		$this->data_master['cod_consulta'] = $cod_consulta;
-		$this->data_master['initial'] = $group->initial;
-		$this->data_master['estado'] = 1;
-
-		foreach ($this->table_consulta as $key => $name_field)
+		foreach ($this->master_table_fields as $key => $field_name)
 		{
-			if ( !in_array( $name_field, $this->array_fields ) )
+			if ( !in_array( $field_name, $this->fields_array ) )
 			{
-				$this->data_master[$name_field] = ($this->input->post($name_field) == '') ? null : $this->input->post($name_field);
+				$this->master_data[$field_name] = ($this->input->post($field_name) == '') ? null : $this->input->post($field_name);
 			}
 		}
+		$this->result = $this->asuntos_model->insert_data( $this->master_data, $this->master_table );
 
-		$this->result = $this->asuntos_model->insert_data( $this->data_master, 'Consulta' );
 
+		$this->detail_data['username'] = $this->user->username;
+		$this->detail_data['cod_consulta'] = $new_cod_consulta;
+		$this->detail_data['nro_detalle'] = 1;
+		$this->detail_data['tipo'] = $this->user->type;// usuario 0 y consultor 1
+		$this->detail_data['fecha'] = date('Y/m/d H:i:s');
 
-		$this->data_detail['username'] = $user->username;
-		$this->data_detail['cod_consulta'] = $cod_consulta;
-		$this->data_detail['nro_detalle'] = 1;
-		$this->data_detail['tipo'] = $user->type;// usuario 0 y consultor 1
-		// $this->data_detail['fecha'] = date('Y/m/d H:i:s');
-		$this->data_detail['fecha'] = date('d/m/Y H:i:s');
+		$this->detail_table_fields = $this->asuntos_model->get_fields( $this->detail_table );
+		$this->fields_array = array( 'username', 'cod_consulta', 'nro_detalle', 'tipo', 'fecha' );
 
-		$this->table_consulta_detalle = $this->asuntos_model->get_fields('Consulta_Detalle');
-		$this->array_fields = array( 'username', 'cod_consulta', 'nro_detalle', 'tipo', 'fecha' );
-
-		foreach ($this->table_consulta_detalle as $key => $name_field)
+		foreach ($this->detail_table_fields as $key => $field_name)
 		{
-			if ( !in_array( $name_field, $this->array_fields ) )
+			if ( !in_array( $field_name, $this->fields_array ) )
 			{
-				$this->data_detail[$name_field] = ($this->input->post($name_field) == '') ? null : $this->input->post($name_field);
+				$this->detail_data[$field_name] = ( $this->input->post($field_name) == '' ) ? null : $this->input->post($field_name);
 			}
 		}
-
-
-		$this->result = $this->asuntos_model->insert_data( $this->data_detail, 'Consulta_Detalle' );
+		$this->result = $this->asuntos_model->insert_data( $this->detail_data, $this->detail_table );
 
 		if ( $this->result > 0 ) 
 		{
@@ -141,15 +148,14 @@ class Asuntos extends CI_Controller {
 	{
 		$cod_categoria = $this->input->post('group_id');
 		$cod_consulta = $this->input->post('cod_consulta');
-		// $fecha_cierre = date('Y/m/d');
-		$fecha_cierre = date('d/m/Y');
 
-		$data_update = array( 'estado' => 0, 'fecha_cierre' => $fecha_cierre );
-		$condicional = array( 'group_id' => $cod_categoria, 'cod_consulta' => $cod_consulta );
+		$fecha_cierre = date('Y/m/d');
+		$update_data = array( 'estado' => 0, 'fecha_cierre' => $fecha_cierre );
+		$this->conditional = array( 'group_id' => $cod_categoria, 'cod_consulta' => $cod_consulta );
 
-		$this->result = $this->asuntos_model->update_data( $data_update, 'Consulta', $condicional );
+		$this->result = $this->asuntos_model->update_data( $update_data, $this->master_table, $this->conditional );
 
-		if ( $this->result > 0 ) 
+		if ( $this->result > 0 )
 		{
 			$this->message = "Se cerro la Conversacion!";
 		}
