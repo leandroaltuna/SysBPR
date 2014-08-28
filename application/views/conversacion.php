@@ -45,7 +45,7 @@
 									{
 										$disabled = 'disabled="true"';
 									}
-									elseif ( $user->type == 0 && $user->username != $cabecera->username )
+									elseif ( $user->type == 0 && $user->id != $cabecera->user_id )
 									{
 										$disabled = 'disabled="true"';
 									}

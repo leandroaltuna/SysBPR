@@ -2,6 +2,15 @@
 
 class Asuntos extends CI_Controller {
 
+	private $master_table = 'Consulta';
+	private $detail_table = 'Consulta_Detalle';
+	private $conditional = '';
+
+	private $group = array();
+	private $user = array();
+	private $parameters = array();
+
+
 	function __construct()
 	{
 		parent::__construct();
@@ -15,19 +24,12 @@ class Asuntos extends CI_Controller {
 		}
 
 		$this->load->model('asuntos_model');
-		$this->master_table = 'Consulta';
-		$this->detail_table = 'Consulta_Detalle';
-		$this->conditional = '';
-
-		$this->group = array();
-		$this->user = array();
-		$this->parameters = array();
+		$this->user = $this->ion_auth->user()->row();
 	}
 
 	function assign_header_variables( $cod_categoria, $main_content )
 	{
 		$this->group = $this->ion_auth->group($cod_categoria)->row();
-		$this->user = $this->ion_auth->user()->row();
 
 		$this->parameters['title'] = 'Consultas de '.$this->group->name;
 		$this->parameters['description'] = 'Temas de Conversacion';
@@ -47,7 +49,7 @@ class Asuntos extends CI_Controller {
 
 		if ( $type == 0 ) // usuario
 		{
-			$this->conditional = 'username = '.$this->user->username.' and group_id = '.$this->group->id;
+			$this->conditional = 'user_id = '.$this->user->id.' and group_id = '.$this->group->id;
 		}
 		else if ( $type == 1 ) // consultor
 		{
@@ -61,7 +63,7 @@ class Asuntos extends CI_Controller {
 
 		if ( $type == 0 )
 		{
-			$this->conditional = 'username <> '.$this->user->username.' and group_id = '.$this->group->id;
+			$this->conditional = 'user_id <> '.$this->user->id.' and group_id = '.$this->group->id;
 			$this->parameters['contenido_adicional'] = $this->asuntos_model->sorted_data_selection( $this->master_table, $this->conditional, $sorted )->result();
 		}
 
@@ -84,7 +86,7 @@ class Asuntos extends CI_Controller {
 	{
 		$cod_categoria = $this->input->post('group_id');
 
-		$this->user = $this->ion_auth->user()->row();
+		// $this->user = $this->ion_auth->user()->row();
 		$this->group = $this->ion_auth->group($cod_categoria)->row();
 
 		$this->conditional = 'group_id = '.$this->group->id;
@@ -93,9 +95,9 @@ class Asuntos extends CI_Controller {
 		$new_cod_consulta = $number + 1;
 
 		$this->master_table_fields = $this->asuntos_model->get_fields( $this->master_table );
-		$this->fields_array = array( 'username', 'cod_consulta', 'estado', 'initial' );
+		$this->fields_array = array( 'user_id', 'cod_consulta', 'estado', 'initial' );
 
-		$this->master_data['username'] = $this->user->username;
+		$this->master_data['user_id'] = $this->user->id;
 		$this->master_data['cod_consulta'] = $new_cod_consulta;
 		$this->master_data['initial'] = $this->group->initial;
 		$this->master_data['estado'] = 1;
@@ -110,14 +112,14 @@ class Asuntos extends CI_Controller {
 		$this->result = $this->asuntos_model->insert_data( $this->master_data, $this->master_table );
 
 
-		$this->detail_data['username'] = $this->user->username;
+		$this->detail_data['user_id'] = $this->user->id;
 		$this->detail_data['cod_consulta'] = $new_cod_consulta;
 		$this->detail_data['nro_detalle'] = 1;
 		$this->detail_data['tipo'] = $this->user->type;// usuario 0 y consultor 1
 		$this->detail_data['fecha'] = date('Y/m/d H:i:s');
 
 		$this->detail_table_fields = $this->asuntos_model->get_fields( $this->detail_table );
-		$this->fields_array = array( 'username', 'cod_consulta', 'nro_detalle', 'tipo', 'fecha' );
+		$this->fields_array = array( 'user_id', 'cod_consulta', 'nro_detalle', 'tipo', 'fecha' );
 
 		foreach ($this->detail_table_fields as $key => $field_name)
 		{

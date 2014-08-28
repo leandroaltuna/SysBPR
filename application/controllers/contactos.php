@@ -2,6 +2,10 @@
 
 class Contactos extends CI_Controller {
 
+	private $master_table = "Consulta";
+	private $user;
+	private $parameters;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -14,8 +18,7 @@ class Contactos extends CI_Controller {
 		}
 
 		$this->load->model('contactos_model');
-
-		$this->master_table = 'Consulta';
+		$this->user = $this->ion_auth->user()->row();
 	}
 
 	function index()
@@ -24,7 +27,6 @@ class Contactos extends CI_Controller {
 		$this->parameters['description'] = 'Panel de Control';
 		$this->parameters['main_content'] = 'contactos';
 
-		$this->user = $this->ion_auth->user()->row();
 		$this->parameters['user'] = $this->user;
 
 		$this->user_groups = $this->ion_auth->get_users_groups($this->user->id)->result();
