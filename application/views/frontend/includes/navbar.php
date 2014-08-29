@@ -31,21 +31,9 @@
 									<img src="<?php echo base_url('img').'/'.$user->image; ?>" class="img-circle" alt="User Image" />
 									<p>
 										<?php echo $user->first_name.' '.$user->last_name; ?> - <?php echo $user->company; ?>
-										<!-- <small>Member since Nov. 2012</small> -->
 									</p>
 								</li>
 								<!-- Menu Body -->
-								<!-- <li class="user-body">
-									<div class="col-xs-4 text-center">
-										<a href="#">Followers</a>
-									</div>
-									<div class="col-xs-4 text-center">
-										<a href="#">Sales</a>
-									</div>
-									<div class="col-xs-4 text-center">
-										<a href="#">Friends</a>
-									</div>
-								</li> -->
 								<!-- Menu Footer-->
 								<li class="user-footer">
 									<div class="pull-left">
@@ -102,7 +90,6 @@
 							html +=			'</ul>' +
 										'</li>' +
 										'<li class="footer">' +
-											// '<a href="#">See All Messages</a>' +
 										'</li>' +
 									'</ul>';
 
@@ -117,12 +104,8 @@
 					// start message //
 					contenido = '<li>' +
 									'<a href="'+ CI.site_url +'/conversacion/'+ categoria +'/'+ consulta +'">' +
-										// '<div class="pull-left">' +
-										// 	'<img src="'+ CI.base_url +'img/' + user_image + '" class="img-circle" alt="User Image"/>' +
-										// '</div>' +
 										'<h4>' +
 											name_categoria +
-											//'<small><i class="fa fa-clock-o"></i> 5 mins</small>' +
 										'</h4>' +
 										'<p>'+ issues +'</p>' +
 									'</a>' +
