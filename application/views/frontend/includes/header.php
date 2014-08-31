@@ -2,7 +2,7 @@
 <html lang="es">
 	<head>
 		<meta charset="UTF-8">
-		<title>Sys BPR | Escritorio</title>
+		<title>BPR OTED</title>
 		<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 		<!-- bootstrap 3.0.2 -->
 		<link href="<?php echo base_url('css/bootstrap.min.css'); ?>" rel="stylesheet" type="text/css" />
@@ -10,20 +10,12 @@
 		<link href="<?php echo base_url('css/font-awesome.min.css'); ?>" rel="stylesheet" type="text/css" />
 		<!-- Ionicons -->
 		<link href="<?php echo base_url('css/ionicons.min.css'); ?>" rel="stylesheet" type="text/css" />
-		<!-- Morris chart -->
-		<link href="<?php echo base_url('css/morris/morris.css'); ?>" rel="stylesheet" type="text/css" />
-		<!-- jvectormap -->
-		<link href="<?php echo base_url('css/jvectormap/jquery-jvectormap-1.2.2.css'); ?>" rel="stylesheet" type="text/css" />
-		<!-- Date Picker -->
-		<link href="<?php echo base_url('css/datepicker/datepicker3.css'); ?>" rel="stylesheet" type="text/css" />
-		<!-- Daterange picker -->
-		<link href="<?php echo base_url('css/daterangepicker/daterangepicker-bs3.css'); ?>" rel="stylesheet" type="text/css" />
+		
 		<!-- DATA TABLES -->
         <link href="<?php echo base_url('css/datatables/dataTables.bootstrap.css'); ?>" rel="stylesheet" type="text/css" />
-		<!-- bootstrap wysihtml5 - text editor -->
-		<link href="<?php echo base_url('css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); ?>" rel="stylesheet" type="text/css" />
+		
 		<!-- Theme style -->
-		<link href="<?php echo base_url('css/AdminLTE.css'); ?>" rel="stylesheet" type="text/css" />
+		<link href="<?php echo base_url('css/Admin.css'); ?>" rel="stylesheet" type="text/css" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,7 +25,6 @@
 		<![endif]-->
 
 		<!-- jQuery 2.0.2 -->
-		<!-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
 		<script src="<?php echo base_url('js/jquery.min.js'); ?>" type="text/javascript"></script>
 
 		<!-- jQuery Validation -->
