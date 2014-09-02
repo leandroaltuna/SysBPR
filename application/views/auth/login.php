@@ -85,11 +85,20 @@
 		echo form_open("auth/login", $form_attributes);
 	?>
 		<div class="row colored">
+			<span style="text-align: center; display: block; font-weight: 500; font-size: 120%">Evaluación del Primer Concurso Excepcional de Reubicación <br /> en la Tercera, Cuarta, Quinta y Sexta Escalas Magisteriales 2014</span>
+
+		
+
 			<div id="contentdiv" class="contcustom">
-				<span class="fa fa-spinner bigicon"></span>
-				<h2>
-					<?php echo lang('login_heading');?>
-				</h2>
+
+				<span><img src="<?php echo base_url('img/INEI_logo.png') ?>"></span>
+
+				<br /><br />
+
+				<span style="text-align: center; display: block; font-weight: 300; color: #777">BANCO DE PREGUNTAS Y RESPUESTAS</span>
+
+				<br /><br />
+
 				<div id="infoMessage">
 					<?php echo $message;?>
 				</div>
